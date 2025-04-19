@@ -9,8 +9,20 @@ using namespace std;
 
 void get_URL( const string& host, const string& path )
 {
-  cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
-  cerr << "Warning: get_URL() has not been implemented yet.\n";
+  Address address { host, "http" };
+  TCPSocket sock;
+
+  sock.connect( address );
+  string get_request
+    = "GET " + path + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Connection: close\r\n" + "\r\n";
+  sock.write( get_request );
+
+  // Read until EOF and print to stdout
+  string buffer;
+  while ( !sock.eof() ) {
+    sock.read( buffer );
+    cout << buffer;
+  }
 }
 
 int main( int argc, char* argv[] )
@@ -22,9 +34,9 @@ int main( int argc, char* argv[] )
 
     auto args = span( argv, argc );
 
-    // The program takes two command-line arguments: the hostname and "path" part of the URL.
-    // Print the usage message unless there are these two arguments (plus the program name
-    // itself, so arg count = 3 in total).
+    // The program takes two command-line arguments: the hostname and "path"
+    // part of the URL. Print the usage message unless there are these two
+    // arguments (plus the program name itself, so arg count = 3 in total).
     if ( argc != 3 ) {
       cerr << "Usage: " << args.front() << " HOST PATH\n";
       cerr << "\tExample: " << args.front() << " stanford.edu /class/cs144\n";
