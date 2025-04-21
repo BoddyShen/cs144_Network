@@ -47,8 +47,6 @@ private:
 
   std::map<uint64_t, std::string> _segments; // index -> data
 
-  // Next byte we’re allowed to write into the ByteStream
-  uint64_t _next_byte { 0 };
   uint64_t _bytes_pending { 0 };
   // If/when we see the very last byte of the stream:
   bool _eof_seen { false };

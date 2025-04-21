@@ -70,12 +70,11 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
     }
   }
 
-  // Update _next_byte to the next byte we can write to the output stream
+  // Update first_unpopped_index, first_unacceptable_index, and first_unassembled_index
   uint64_t first_unpopped_index = output_.reader().bytes_popped();
-  _next_byte = first_unpopped_index;
-
-  uint64_t first_unacceptable_index = _next_byte + output_.get_capacity();
-  uint64_t first_unassembled_index = _next_byte + output_.get_capacity() - output_.writer().available_capacity();
+  uint64_t first_unacceptable_index = first_unpopped_index + output_.get_capacity();
+  uint64_t first_unassembled_index
+    = first_unpopped_index + output_.get_capacity() - output_.writer().available_capacity();
 
   if ( first_index >= first_unacceptable_index ) {
     return; // Ignore data that is beyond the capacity
