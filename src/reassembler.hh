@@ -1,12 +1,14 @@
 #pragma once
 
 #include "byte_stream.hh"
+#include <map>
+#include <string>
 
 class Reassembler
 {
 public:
   // Construct Reassembler to write into given ByteStream.
-  explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ) {}
+  explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ), _segments() {}
 
   /*
    * Insert a new substring to be reassembled into a ByteStream.
@@ -42,4 +44,15 @@ public:
 
 private:
   ByteStream output_; // the Reassembler writes to this ByteStream
+
+  std::map<uint64_t, std::string> _segments; // index -> data
+
+  // Next byte we’re allowed to write into the ByteStream
+  uint64_t _next_byte { 0 };
+  uint64_t _bytes_pending { 0 };
+  // If/when we see the very last byte of the stream:
+  bool _eof_seen { false };
+  uint64_t _eof_index { 0 };
+
+  std::pair<bool, uint64_t> _merge( uint64_t, std::string );
 };
