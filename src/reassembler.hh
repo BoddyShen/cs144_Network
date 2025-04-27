@@ -42,10 +42,16 @@ public:
   // Access output stream writer, but const-only (can't write from outside)
   const Writer& writer() const { return output_.writer(); }
 
+  // Access first_unassembled_index
+  uint64_t get_first_unassembled_index() const { return first_unassembled_index; }
+
 private:
   ByteStream output_; // the Reassembler writes to this ByteStream
 
   std::map<uint64_t, std::string> _segments; // index -> data
+
+  // Next byte we’re allowed to write into the ByteStream, un
+  uint64_t first_unassembled_index { 0 };
 
   uint64_t _bytes_pending { 0 };
   // If/when we see the very last byte of the stream:

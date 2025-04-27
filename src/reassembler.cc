@@ -73,8 +73,7 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
   // Update first_unpopped_index, first_unacceptable_index, and first_unassembled_index
   uint64_t first_unpopped_index = output_.reader().bytes_popped();
   uint64_t first_unacceptable_index = first_unpopped_index + output_.get_capacity();
-  uint64_t first_unassembled_index
-    = first_unpopped_index + output_.get_capacity() - output_.writer().available_capacity();
+  first_unassembled_index = first_unpopped_index + output_.get_capacity() - output_.writer().available_capacity();
 
   if ( first_index >= first_unacceptable_index ) {
     return; // Ignore data that is beyond the capacity
