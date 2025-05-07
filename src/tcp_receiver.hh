@@ -28,5 +28,5 @@ public:
 
 private:
   Reassembler reassembler_;
-  std::optional<Wrap32> _isn;
+  std::optional<Wrap32> _isn {};
 };

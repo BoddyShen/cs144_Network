@@ -48,4 +48,17 @@ private:
   ByteStream input_;
   Wrap32 isn_;
   uint64_t initial_RTO_ms_;
+
+  // push data
+  bool syn_sent_ = false;      // whether SYN has been sent
+  bool fin_sent_ = false;      // whether FIN has been sent
+  uint64_t seq_in_flight_ = 0; // number of sequence numbers in flight
+
+  bool timer_running_ = false;
+  uint64_t timer_current_ = 0;
+  uint64_t current_RTO_ms_ = 0;
+  std::queue<TCPSenderMessage> outstanding_messages_ {};
+  uint64_t consecutive_retransmissions_ = 0; // number of consecutive retransmissions
+  uint64_t receiver_window_size_ = 0;        // last seen receiver window size
+  uint64_t next_seqno_abs_ = 0; // highest absolute sequence number sent so far, used as unwrap “checkpoint”
 };
